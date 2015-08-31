@@ -24,6 +24,8 @@ var GameStartMenuLayer = cc.Layer.extend({
 	
 	score : null,
 	
+	canClick : false,
+	
 	ctor : function(){
 		this._super();
 		
@@ -45,7 +47,8 @@ var GameStartMenuLayer = cc.Layer.extend({
 				self.removeChild(self.menu);
 				self.removeChild(self.label);
 				
-				self.curPillar.runAction(cc.moveTo(1,cc.p(self.curPillar.width * 10/2,0)));
+				self.curPillar.runAction(cc.sequence(cc.moveTo(1,cc.p(self.curPillar.width * 10/2,0)),cc.callFunc(self.initBegin,self,self)));
+//				self.curPillar.runAction(cc.moveTo(1,cc.p(self.curPillar.width * 10/2,0)));
 				this.monkey.runAction(cc.moveTo(PublicData.timeMoveMonkeyLeft,cc.p(this.monkey.width / 2,this.originMonkey.y)));
 				self.crateNextPillar(self);
 				
@@ -66,7 +69,7 @@ var GameStartMenuLayer = cc.Layer.extend({
         	event:cc.EventListener.TOUCH_ONE_BY_ONE,
         	swallowTouches: true,
         	onTouchBegan:  function(touch, event){
-        		if(self.isGameOver){
+        		if(self.isGameOver || !self.canClick){
         			return false;
         		}
         		
@@ -75,7 +78,7 @@ var GameStartMenuLayer = cc.Layer.extend({
 	    	},
 	    	onTouchEnded : function(touch, event){
 	            self.unscheduleAllCallbacks();
-	            
+	            self.canClick = false;
 	            self.line.runAction(cc.sequence(cc.rotateTo(0.5,90),cc.callFunc(self.moveMonkey,self,self)));
 	    	}
         },this);
@@ -169,6 +172,7 @@ var GameStartMenuLayer = cc.Layer.extend({
 	
 	initBegin : function(){
 		
+		this.canClick = true;
 	},
 	
 	/*创建下一个木桩*/
@@ -213,11 +217,13 @@ var GameStartMenuLayer = cc.Layer.extend({
 		this.removeChild(this.curPillar);
 		this.curPillar = this.nextPillar;
 		this.curPillar.runAction(cc.moveTo(1,cc.p(this.curPillar.width * 10/2,0)));
-		this.monkey.runAction(cc.moveTo(1,cc.p(this.monkey.width / 2,this.originMonkey.y)));
+//		this.monkey.runAction(cc.moveTo(1,cc.p(this.monkey.width / 2,this.originMonkey.y)));
+		this.monkey.runAction(cc.sequence(cc.moveTo(1,cc.p(this.monkey.width / 2,this.originMonkey.y)),cc.callFunc(this.initBegin,this)));
 		this.crateNextPillar(this);
 		
 		this.line.scaleY = 0;
 		this.line.rotation = 0;
+		
 	},
 	
 	/*显示游戏结束画面*/
