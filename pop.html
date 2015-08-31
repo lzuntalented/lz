@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="index">
+    <meta content="telephone=no" name="format-detection"/>
+    <meta content="email=no" name="format-detection"/>
+    <!-- uc强制竖屏 -->
+    <meta name="screen-orientation" content="portrait">
+    <!-- UC强制全屏 -->
+    <meta name="full-screen" content="yes">
+    <!-- UC应用模式 -->
+    <meta name="browsermode" content="application">
+    <!-- QQ强制竖屏 -->
+    <meta name="x5-orientation" content="portrait">
+    <!-- QQ强制全屏 -->
+    <meta name="x5-fullscreen" content="true">
+    <!-- QQ应用模式 -->
+    <meta name="x5-page-mode" content="app">
+    <title>index</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        canvas {
+            display: block;
+            /*background:-webkit-gradient(linear, 0 100%, 0 0, from(#79c5ef), to(#a1d9ff));*/
+            position: absolute;
+            /*background-color: #FFF9E0;*/
+            background: url("bg.jpg");
+
+        }
+    </style>
+    <title></title>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+</body>
+<script>
+    eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)d[e(c)]=k[c]||e(c);k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1;};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p;}('(q(){5 15=0;5 1j=[\'2I\',\'2O\',\'2V\',\'o\'];s(5 x=0;x<1j.z&&!F.W;++x){F.W=F[1j[x]+\'2U\'];F.1S=F[1j[x]+\'2W\']||F[1j[x]+\'2X\']}m(!F.W)F.W=q(1X,2Q){5 1r=U 1a().2P();5 1t=L.1o(0,16-(1r-15));5 1v=F.2R(q(){1X(1r+1t)},1t);15=1r+1t;B 1v};m(!F.1S)F.1S=q(1v){2Z(1v)}}());5 u={1g:V.10.1g,1e:V.10.1e,2s:q(){5 w=V.10.1g,h=V.10.1e;B(w>=h)}(),C:q(){5 w=V.10.1g,h=V.10.1e;w>=h&&(w=9/16*h);B w}(),H:V.10.1e,24:36,1Z:35,N:q(){B D.C/D.24},37:q(){B D.H/D.1Z}};5 v=V.39("#v");5 l=v.2k("2d");2r(v);5 21=["#38","#31","#30","#32","#34"];5 n=[];5 r=33;5 f=[];q 1R(x,y,r,A,J,K){D.x=x*u.N()>>0;D.y=y*u.N()>>0;D.2G=x*u.N()>>0;D.17=y*u.N()>>0;D.r=r*u.N()*0.9>>0;D.A=A;D.J=J;D.K=K;D.2a=21[A];D.11=1}q 22(){s(5 i=0;i<7;i++){n[i]=[];s(5 j=0;j<7;j++){5 A=1N(0,4);n[i][j]=U 1R(29+(2*j+1)*r,(2*i+1)*r,r,A,i,j)}}}22();5 1b=U 2H();1b.2F="2E.2C";1b.2D=q(){1c()};q 1p(){m(f.z){s(5 i=0;i<7;i++){s(5 j=0;j<n[i].z;j++){m(n[i][j]){m(n[i][j].A==f[0].A){n[i][j].11=1}1d{n[i][j].11=0.2}}}}}m(!1i){s(5 i=0;i<7;i++){s(5 j=0;j<n[i].z;j++){m(n[i][j]){n[i][j].11=1}}}}}q 1W(p){5 a=X;5 r=n[0][0].r,1L=p.y/(2*r) >> 0,1M = p.x/(2*r)>>0,20=L.1o(1L-1,0),2f=L.1D(1L+1,7),2e=L.1o(1M-1,0),2c=L.1D(1M+1,7);s(5 i=20;i<2f;i++){s(5 j=2e;j<2c;j++){a=n[i][j];m(a&&L.2K((p.x-a.x)*(p.x-a.x)+(p.y-a.y)*(p.y-a.y))<=a.r){m(f.z){m(f[0].A==a.A){s(5 k=0;k<f.z;k++){m(f[k]==a)1k}m(k==f.z){5 1Q=f[f.z-1],S=1Q.J,Q=1Q.K;m((S-1==i&&Q-1==j)||(S-1==i&&Q==j)||(S-1==i&&Q+1==j)||(S==i&&Q-1==j)||(S==i&&Q+1==j)||(S+1==i&&Q-1==j)||(S+1==i&&Q==j)||(S+1==i&&Q+1==j))f.1u(a)}m(a==f[f.z-2]&&f.z>1)f.2N();B}}1d{f.1u(a);B}}}}}5 E=[];q 25(){5 R=F.r*u.N();E=[];s(5 j=0;j<7;j++){5 Y=-1,M=0;s(5 i=6;i>=0;i--){m(n[i][j]==X){m(Y==-1)Y=i}1d{m(Y!=-1){E.1u(n[i][j]);n[i][j].J=Y-M;n[i][j].Z=(Y-M-i)*2*R;n[Y-M][j]=n[i][j];M++;n[i][j]=X}}}}}q 26(){5 R=r*u.N();s(5 j=0;j<7;j++){5 M=-1;s(5 i=6;i>=0;i--){m(n[i][j]==X){m(M==-1)M=i;5 A=1N(0,4);n[i][j]=U 1R(29+(2*j+1)*r,(2*i+1)*r,r,A,i,j);n[i][j].Z=2*(M+1)*R;n[i][j].y=-(2*(M+1)-2*i-1)*R;n[i][j].17=-(2*(M+1)-2*i-1)*R;E.1u(n[i][j])}}}}5 1i=G;5 1s,3B;v.12("2y",1I,G);v.12("2A",1K,G);v.12("2B",1T,G);v.12("2l",1I,G);v.12("2m",1K,G);v.12("2u",1T,G);5 18=G;q 1I(e){m(18)B;1i=1h;1n=1h;5 p=1x(D,e);1s=p.x;1U=p.y;1W(p);m(f.z){1p();1c()}}q 1K(e){m(!1i)B;5 1V=u.N()*r*0.19>>0,p=1x(D,e),I=f.z,27=L.1Y(p.x-1s),Z=L.1Y(p.y-1U);m(27>1V||Z>1V){1W(p);1s=p.x;1U=p.y;}m(I!=f.z){1p();1c()}}q 1T(e){1i=G;1n=G;1p();1c();m(f.z>=3){18=1h;13=+U 1a();W(1B)}1d{f=[]}}5 1n=1h;q 28(){m(f.z>=2&&1n){l.1m();l.3C=f[0].r*0.3g>>0;l.3f="2b";l.3h="2b";l.3i=f[0].2a;l.2g();l.3a(f[0].x,f[0].y);s(5 i=1;i<f.z;i++){l.3c(f[i].x,f[i].y)}l.3e();l.1f()}}q 1c(){5 a=X;l.1C(0,0,u.C,u.H);l.1m();s(5 i=0;i<7;i++){s(5 j=0;j<7;j++){a=n[i][j];m(a){l.2i=a.11;l.1J(1b,a.A*T,0,T,T,a.x-a.r,a.y-a.r,2*a.r,2*a.r)}}}l.1f();28()}5 13,3k;q 1B(){5 R=F.r*u.N();5 I=f.z;5 O=+U 1a();5 1q=L.1o(0,1-(O-13)/3r);5 a=X;s(5 i=0;i<I;i++){n[f[i].J][f[i].K].11=1q}l.1m();l.2i=1q;s(5 i=0;i<I;i++){a=n[f[i].J][f[i].K];a.11=1q;l.1C(a.x-R,a.y-R,2*R,2*R);l.1J(1b,a.A*T,0,T,T,a.x-a.r,a.y-a.r,2*a.r,2*a.r)}l.1f();m(O-13>=3s){18=G;s(5 i=0;i<I;i++){n[f[i].J][f[i].K]=X}f=[];25();26();m(E.z){18=1h;13=+U 1a();W(1z)}}1d{W(1B)}}q 1z(){5 a=X;5 I=E.z;m(I==0)B;l.1m();l.2g();s(5 i=0;i<I;i++){a=n[E[i].J][E[i].K];l.3t(a.x-a.r,a.y-a.r,2*a.r,2*a.r)}l.3m();l.1C(0,0,u.C,u.H);l.1f();5 O=+U 1a();5 2h=O-13;s(5 i=0;i<I;i++){a=n[E[i].J][E[i].K];a.y=L.1D(a.17+a.Z,2q(2h,a.17,a.Z,2w))}l.1m();s(5 i=0;i<I;i++){a=n[E[i].J][E[i].K];l.1J(1b,a.A*T,0,T,T,a.x-a.r,a.y-a.r,2*a.r,2*a.r)}l.1f();m(O-13>2w){18=G;s(5 i=0;i<I;i++){a=n[E[i].J][E[i].K];a.y=a.17+a.Z;a.17=a.y}E=[];1c()}1d{W(1z)}}q 1x(a,e){e.3p();m(a===1P)B;5 c=a.3n(),p={};3l(e.A){14\'2y\':14\'2A\':14\'2B\':14\'3u\':p.x=e.1A-c.1E;p.y=e.1y-c.1F;1k;14\'2u\':14\'2m\':p.x=e.2n[0].1A-c.1E;p.y=e.2n[0].1y-c.1F;1k;14\'2l\':p.x=e.2o[0].1A-c.1E;p.y=e.2o[0].1y-c.1F;1k;3q:1k}B p}q 2r(v,C,H){5 2x=/(3d|3b|3j|3D)/i.3x(3w.3v);m(v===1P)B;m(u.2s){5 w=u.1g,x=(w-u.C)/2>>0;v.1w.2z=\'2j(\'+x+\'1l,0,0)\'}5 l=v.2k(\'2d\');5 1G=F.1G||1,1H=l.3y||l.3z||l.3A||l.3E||l.1H||1,P=1G/1H;m(u.C*P>2v&&!2x){P=2v/u.C}u.P=P;!C&&(C=u.C,H=u.H);!H&&(H=C);v.1w.C=C+\'1l\';v.1w.H=H+\'1l\';v.C=C*P;v.H=H*P;l.3o(P,P)}q 2J(v,x,y){m(v===1P)B;v.1w.2z=\'2j(\'+x+\'1l,\'+y+\'1l,0)\'}q 2L(a,A,2t){a.12(A,2t,G)}q 1N(1O,2p){5 t=2p-1O+1;B(L.2M()*t+1O)>>0}q 2q(t,b,c,d){m((t/= d /2)<1)B c/2*t*t+b;B-c/2*((--t)*(t-2)-1)+b}5 g=9.8;5 2S=+U 1a();5 15=0;q 2T(O){5 23=2Y/(O-15);15=O;B 23}',62,227,'|||||var|||||obj|||||res||||||cxt|if|objs|||function||for||config|canvas||||length|type|return|width|this|downArr|window|false|height|len|row|col|Math|index|scaleW|now|ratio|pj||pi|80|new|document|requestAnimationFrame|null|end|dy|documentElement|opacity|addEventListener|hiddenST|case|lastTime||cy|hiddenAni||Date|img|drawCircle|else|clientHeight|restore|clientWidth|true|down|vendors|break|px|save|canDrawLine|max|updateCircleVisible|op|currTime|sx|timeToCall|push|id|style|getPosition|clientY|downCircleAni|clientX|hiddenAnifn|clearRect|min|left|top|devicePixelRatio|backingStorePixelRatio|eventDown|drawImage|eventMove|di|dj|selectFrom|low|undefined|preObj|circle|cancelAnimationFrame|eventUp|sy|dR|inCircle|callback|abs|designHeight|si|colors|createCircle|fps|designWidth|downCircle|addCircle|dx|drawMoveLine||color|round|ej||sj|ei|beginPath|del|globalAlpha|translate3d|getContext|touchstart|touchmove|changedTouches|touches|up|tween|adjustCanvasSize|adjust|fn|touchend|720|280|isIOS|mousedown|transform|mousemove|mouseup|png|onload|ball|src|cx|Image|ms|adjustCanvasPosition|sqrt|addEvent|random|pop|moz|getTime|element|setTimeout|start|calculateFps|RequestAnimationFrame|webkit|CancelAnimationFrame|CancelRequestAnimationFrame|1000|clearTimeout|ffbf43|ff6c6c|51c4ff|73|50aab2|1920|1080|scaleH|b18bff|querySelector|moveTo|iPad|lineTo|iPhone|stroke|lineCap|45|lineJoin|strokeStyle|iPod|then|switch|clip|getBoundingClientRect|scale|preventDefault|default|300|320|rect|click|userAgent|navigator|test|webkitBackingStorePixelRatio|mozBackingStorePixelRatio|msBackingStorePixelRatio|xy|lineWidth|iOS|oBackingStorePixelRatio'.split('|'),0,{}))
+
+
+</script>
+</html>
