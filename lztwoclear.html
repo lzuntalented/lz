@@ -105,7 +105,11 @@
 						if(canCancle(arrayPoint[i][j].row,arrayPoint[i][j].col)){
 							clearPos = [];
 							clearPoints(arrayPoint[i][j],arrayPoint[i][j].type);
-							createClearPoint();
+							isMoving = true;
+							setTimeout(function(){
+								createClearPoint();
+								isMoving = false;
+							},500);
 							document.getElementById("socre").textContent = parseInt(document.getElementById("socre").textContent) + 1;
 						}
 						break;
