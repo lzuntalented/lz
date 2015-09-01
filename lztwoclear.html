@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+	</head>
+	<style type="text/css">
+		html,body{
+			margin :0 0;
+			padding:  0 0;
+			width: 100%;
+			height: 100%;
+		}
+		#socre{
+			width: 100px;
+			height: 100px;
+			background: palegoldenrod;
+			border-radius: 20px;
+			text-align: center;
+			line-height: 100px;
+			position: absolute;
+			top: 10%;
+			left: 100px;
+			font-size: 3em;
+		}
+	</style>
+	<body style="text-align: center;background: pink;">
+		<canvas id="cav" width="640" height="960" style="margin: 0 auto;background: white;"></canvas>
+		<div style="" id="socre">
+			0
+		</div>
+	</body>
+	<script type="text/javascript">
+		var canvas = document.getElementById("cav");
+		var ctx = canvas.getContext("2d");
+		
+		function windowToCanvas(x,y){
+			var bbox = canvas.getBoundingClientRect();
+			return {
+				x : x - bbox.left * (canvas.width / bbox.width),
+				y : y - bbox.top * (canvas.height / bbox.height),
+			};
+		}
+		
+		
+		var panelWidth = 640;
+		var panelHeight = 960;
+		
+		var numV = 10;
+		var numH = 10;
+		
+		var clearPos = [];
+		var arrayPoint = [];
+		var pointRadius = 25;
+		var pointConfig = function(){
+		};
+		
+		var arrayPointType = ['red','green','blue','pink','purple'];
+		var isMoving = false;
+		
+		/*绘制一个圆点*/
+		function createOnePoint(x,y,col,row){
+			ctx.beginPath();
+			var type = Math.floor(Math.random() * arrayPointType.length);
+			var point = new pointConfig();
+			point.x = x;
+			point.y = y;
+			point.col = col;
+			point.row = row;
+			point.type = type;
+			arrayPoint[row][col] = point ;
+			
+			ctx.fillStyle = arrayPointType[type];
+			ctx.arc(x,y,pointRadius,0,Math.PI * 2);
+			ctx.fill();
+		}
+		
+		function createOnePointWithOneParam(coord){
+			createOnePoint(coord.x,coord.y,coord.c,coord.r);
+		}
+		
+		/*清除一个圆点*/
+		function clearOnePoint(x,y){
+			ctx.clearRect(x - pointRadius,y - pointRadius,pointRadius * 2,pointRadius * 2);
+		}
+		
+		for (var i = 0; i < numV; i++) {
+			arrayPoint.push([]);
+			for (var j = 0; j < numH; j++) {
+				createOnePointWithOneParam(createCoordinate(i,j));
+			}
+		}
+		
+		canvas.onmousedown = function(e){
+			if(isMoving) return ;
+			var loc = windowToCanvas(e.clientX,e.clientY);
+			
+			for (var i = 0; i < numV; i++) {
+				for (var j = 0; j < numH; j++) {
+					
+					var a = Math.abs(arrayPoint[i][j].x - loc.x);
+					var b = Math.abs(arrayPoint[i][j].y - loc.y);
+					
+					if(a * a + b * b <= pointRadius * pointRadius){
+						if(canCancle(arrayPoint[i][j].row,arrayPoint[i][j].col)){
+							clearPos = [];
+							clearPoints(arrayPoint[i][j],arrayPoint[i][j].type);
+							createClearPoint();
+							document.getElementById("socre").textContent = parseInt(document.getElementById("socre").textContent) + 1;
+						}
+						break;
+					}
+				}
+			}
+//			canCancle(0,0);
+//			var loc = windowToCanvas(e.clientX,e.clientY);
+		};
+		
+		canvas.onmousemove = function(e){
+			var loc = windowToCanvas(e.clientX,e.clientY);
+		};
+		
+		canvas.onmouseup = function(){
+			
+		}
+		
+		function createCoordinate(row,col){
+			return {
+				x : 20 + pointRadius + col * (pointRadius * 2 + 10),
+				y : row * (pointRadius * 2 + 10) + pointRadius + 20,
+				r : row,
+				c : col
+			}
+		}
+		
+		function canCancle(row,col){
+			var tempH = [];
+			for (var i = col + 1; i < arrayPoint.length; i++) {
+				if(arrayPoint[row][col].type == arrayPoint[row][i].type) {
+					tempH.push(arrayPoint[row][i]);
+				}else{
+					break;
+				}
+			}
+			
+			for (var i = col - 1; i >= 0 ; i--) {
+				if(arrayPoint[row][col].type == arrayPoint[row][i].type) {
+					tempH.push(arrayPoint[row][i]);
+				}else{
+					break;
+				}
+			}
+			
+			var tempV = [];
+			for (var i = row + 1; i < arrayPoint.length; i++) {
+				if(arrayPoint[row][col].type == arrayPoint[i][col].type) {
+					tempV.push(arrayPoint[i][col]);
+				}else{
+					break;
+				}
+			}
+			
+			for (var i = row - 1; i >= 0 ; i--) {
+				if(arrayPoint[row][col].type == arrayPoint[i][col].type) {
+					tempV.push(arrayPoint[i][col]);
+				}else{
+					break;
+				}
+			}
+			
+			var result = false;
+			if(tempH.length > 0 || tempV.length > 0){
+				
+//				clearOnePoint(arrayPoint[row][col].x,arrayPoint[row][col].y);
+//				
+//				result.push();
+//				
+//				for (var i = 0; i < tempH.length; i++) {
+//					clearOnePoint(tempH[i].x,tempH[i].y);
+//				}
+//				
+//				for (var i = 0; i < tempV.length; i++) {
+//					clearOnePoint(tempV[i].x,tempV[i].y);
+//				}
+				return true;
+				
+			}
+			
+			return result;
+			
+			
+			
+			console.log("h-" + tempH.length);
+			console.log("v-" + tempV.length);
+		}
+		
+		
+		function createClearPoint(){
+			for (var i = 0; i < clearPos.length; i++) {
+				createOnePointWithOneParam(createCoordinate(clearPos[i].x,clearPos[i].y));
+			}
+		}
+		
+		function clearPoints(point,type){
+			arrayPoint[point.row][point.col].type = -1;
+			clearOnePoint(point.x,point.y);
+			
+			clearPos.push({
+				x : point.row,
+				y : point.col
+			});
+			
+			if(point.col < numH - 1 && arrayPoint[point.row][point.col + 1].type != -1 && type == arrayPoint[point.row][point.col + 1].type){
+				clearPoints(arrayPoint[point.row][point.col + 1],type);
+			}
+			
+			if(point.col > 0 && arrayPoint[point.row][point.col - 1].type != -1 && type == arrayPoint[point.row][point.col - 1].type){
+				clearPoints(arrayPoint[point.row][point.col - 1],type);
+			}
+			
+			if(point.row < numV - 1 && arrayPoint[point.row + 1][point.col].type != -1 && type == arrayPoint[point.row + 1][point.col].type){
+				clearPoints(arrayPoint[point.row + 1][point.col],type);
+				
+			}
+			
+			if(point.row > 0 && arrayPoint[point.row - 1][point.col].type != -1 && type == arrayPoint[point.row - 1][point.col].type){
+				clearPoints(arrayPoint[point.row - 1][point.col],type);
+			}
+			
+			return ;
+		}
+//		startGame();
+//		function startGame(){
+//			var timeCount = 60;
+//			setInterval(function(){
+//				if(timeCount <= 0){
+//					return ;
+//				}
+//				
+//				ctx.beginPath();
+//				ctx.fillStyle = "greenyellow";
+//				ctx.clearRect(0,0,canvas.width,20);
+//				ctx.fillRect(0,0,canvas.width / 60 * timeCount,20);
+//				timeCount -- ;
+//			},1000);
+//		}
+		
+	</script>
+</html>
