@@ -11,4 +11,8 @@ var PublicData = {
     CARD_COL : 10,
     
     CARD_SPACE : 5,
+    
+    CARD_TYPE : 4,
+    
+    CARD_MOVE_SPEED : 0.3,
 }

@@ -3,6 +3,7 @@ var CardSprite = cc.Sprite.extend({
 	ctor : function(type){
 		this.type = type;
 		this._super("res/fruit/fruit_" + type + ".png");
+		
 	}
 });
 
