@@ -110,7 +110,7 @@ var HelloWorldLayer = cc.Layer.extend({
     			this._equation_b = Math.abs(this._equation_b);
     		}
     		
-    		if(Math.abs(this._wand.x - this._ball.x) >= this._wand.width){
+    		if(Math.abs(this._wand.x - this._ball.x) >= this._wand.width / 2){
     			alert("game over");
     		}
     	}
