@@ -1,6 +1,7 @@
 var res = {
     Start_normal_png : "res/start_normal.png",
     Stick_black_png : "res/stick_black.png",
+    Stick_jpg : "res/stick.jpg",
     
 };
 

@@ -40,7 +40,29 @@ var HelloWorldLayer = cc.Layer.extend({
     	
     	this._equation_b = PublicData.SCREEN_HEIGHT - PublicData.SCREEN_WIDTH / 2 * this._equation_a;
     	
+    	this.initWand();
+    	
     	this.scheduleUpdate();
+    },
+    
+    initWand : function(){
+    	this._wand = new cc.Sprite(res.Stick_jpg);
+    	this._wand.attr({
+    		x : PublicData.SCREEN_WIDTH / 2,
+    		y : 0
+    	});
+    	this.addChild(this._wand);
+    	
+    	var self = this;
+    	cc.eventManager.addListener({
+        	event:cc.EventListener.TOUCH_ONE_BY_ONE,
+        	swallowTouches: true,
+        	onTouchBegan:  function(touch, event){
+	        	var pos = touch.getLocation();
+//	        	var x = pos.x - this._wand.x;
+	        	self._wand.runAction(cc.moveTo(0.5,cc.p(pos.x,0)));
+	    	}
+        },this);
     },
     
     getBallY : function(x){
@@ -86,6 +108,10 @@ var HelloWorldLayer = cc.Layer.extend({
     			this._equation_b = 0 - this._equation_b;
     		}else{
     			this._equation_b = Math.abs(this._equation_b);
+    		}
+    		
+    		if(Math.abs(this._wand.x - this._ball.x) >= this._wand.width){
+    			alert("game over");
     		}
     	}
     	
