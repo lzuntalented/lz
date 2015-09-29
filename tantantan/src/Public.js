@@ -22,4 +22,5 @@ var PublicData = {
     GAME_START : 1,
     
     gameStatus: 1,
+    
 }
