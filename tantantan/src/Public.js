@@ -21,6 +21,6 @@ var PublicData = {
     GAME_OVER : 0,
     GAME_START : 1,
     
-    gameStatus: 1,
+    gameStatus: 1
     
 }
