@@ -17,4 +17,9 @@ var PublicData = {
     CARD_MOVE_SPEED : 0.3,
     
     increase : 5,
+    
+    GAME_OVER : 0,
+    GAME_START : 1,
+    
+    gameStatus: 1,
 }
