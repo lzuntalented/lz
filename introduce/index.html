@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<style type="text/css">
+		*{
+			padding: 0 0;
+			margin: 0 0;
+			list-style: none;
+		}
+			.spinner {
+  margin: 100px auto 0;
+  width: 150px;
+  text-align: center;
+}
+ 
+.spinner > div {
+  width: 30px;
+  height: 30px;
+  background-color: #67CF22;
+ 
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+  animation: bouncedelay 1.4s infinite ease-in-out;
+  /* Prevent first frame from flickering when animation starts */
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+ 
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+ 
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+ 
+@-webkit-keyframes bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0.0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+ 
+@keyframes bouncedelay {
+  0%, 80%, 100% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 40% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
+}
+
+			.div-loading-container{
+				position: fixed;
+				width: 100%;
+				background: rgba(0,0,0,0.3);
+				z-index: 99999;
+			}
+			.div-loading-tip{
+				margin: 0 auto;
+				text-align: center;
+			}
+			.div-main-container{
+				width: 100%;
+				margin: 0 auto;
+				position: relative;
+			}
+			.div-nav-container{
+				width: 100%;
+				height: 50px;
+				background: rgb(24, 180, 237);
+			}
+			.div-nav-title{
+				line-height: 50px;
+				text-align: center;
+				width: 100%;
+				color: white;
+				font-weight: bold;
+				font-size: 18px;
+			}
+			.div-nav-menu{
+				margin: 5px;
+				position: absolute;
+				cursor: pointer;
+			}
+			
+			@-webkit-keyframes animate-menu-show{
+				from{-webkit-transform: scale(0);}
+				to{-webkit-transform: scale(1);}
+			}
+			
+			@keyframes animate-menu-show{
+				from{transform: scale(0);}
+				to{transform: scale(1);}
+			}
+			
+			@-webkit-keyframes animate-menu-hide{
+				from{-webkit-transform: scale(1);}
+				to{-webkit-transform: scale(0);}
+			}
+			
+			@keyframes animate-menu-hide{
+				from{transform: scale(1);}
+				to{transform: scale(0);}
+			}
+			
+			.div-menu-container-animte-show{
+				-webkit-animation: animate-menu-show 0.5s;
+				-webkit-transform-origin: 0 0;
+				
+				animation: animate-menu-show 0.5s;
+				transform-origin: 0 0;
+			}
+			
+			.div-menu-container-animte-hide{
+				-webkit-animation: animate-menu-hide 0.5s forwards;
+				-webkit-transform-origin: 0 0;
+				
+				animation: animate-menu-hide 0.5s forwards;
+				transform-origin: 0 0;
+			}
+			
+			.div-menu-container{
+				width: 100%;
+				position: fixed;
+				top: 0px;
+				
+				display: none;
+				/*transition: all 0.5;*/
+			}
+			.div-menu-context{
+				width: 80%;
+				height: 100%;
+				background: rgba(24, 30, 36,0.98);
+			}
+			.div-menu-right{
+				width: 20%;
+				height: 100%;
+				position: absolute;
+				top: 0px;
+				right: 0px;
+			}
+			.div-menu-head-info-container{
+				padding: 20px;
+				position: relative;
+			}
+			.div-menu-head-info-img{
+				width: 40%;
+			}
+			.div-menu-head-info-img img{
+				border-radius: 50%;
+			}
+			.div-menu-head-info-name{
+				position: absolute;
+				padding-left: 20px;
+				left: 40%;
+				top: 0px;
+				height: 100%;
+			}
+			.div-menu-head-info-name li{
+				line-height: 35px;
+				color: white;
+				font-size: 1.5em;
+			}
+			.div-menu-improvement{
+				padding: 20px;
+				color: #727A80;
+				line-height: 30px;
+				font-size: 18px;
+				text-align: center;
+				padding-top: 0px;
+			}
+			.div-menu-list{
+				padding: 20px;
+				padding-top: 0px;
+			}
+			.div-menu-list li{
+				color: white;
+				line-height: 40px;
+				border-bottom: 1px solid #464343;
+				width: 100%;
+				height: 40px;
+				cursor: pointer;
+			}
+			
+			.butlist{
+				background: #efeff4;
+				padding-top: 10px;
+				padding-bottom: 10px;
+			}
+			
+			.butlist ul li{
+				background: white;
+				/*height: 40px;*/
+				line-height: 40px;
+			}
+			.butlist_line{
+				padding-left: 20px;
+				position: relative;
+				height: 1px;
+				background: #c8c7cc;
+			}
+			.butlist_title{
+				padding-left: 20px;
+				position: relative;
+				height: 39px;
+				color: #333333; 
+			}
+			.butlist_title_context{
+				color: #CACACA;
+				height: auto;
+			}
+			.page{
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="div-main-container">
+			<div class="div-nav-container" >
+				<div class="div-nav-menu">
+					<img src="img/2.jpg" height="40" style="border-radius: 50%;"/>
+				</div>
+				
+				<div id="" class="div-nav-title">
+					个人简历
+				</div>
+			</div>
+			
+			<div class="page" id="page_home" style="display: block;">
+				<div class="butlist">
+					<ul>
+						<li id="set_updateApp">
+							<div class="butlist_title">求职意向</div>
+							<div class="butlist_line"></div>
+						</li>
+						<li>
+							<div class="butlist_title butlist_title_context">
+								求职一份游戏开发相关的工作
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="butlist">
+					<ul>
+						<li id="set_updateApp">
+							<div class="butlist_title">我的优势</div>
+							<div class="butlist_line"></div>
+						</li>
+						<li>
+							<div class="butlist_title butlist_title_context">
+								1.对于游戏开发有着浓厚的兴趣<br />
+								2.熟悉cocos2d-js和cocos2d-x开发<br />
+								3.写过消消乐和斗地主游戏
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="butlist">
+					<ul>
+						<li id="set_updateApp">
+							<div class="butlist_title">我的博客</div>
+							<div class="butlist_line"></div>
+						</li>
+						<li>
+							<div class="butlist_title butlist_title_context">
+								<a target="view_window" href="http://blog.csdn.net/u012601195">csdn博客</a><br />
+								<a target="view_window" href="https://github.com/lzuntalented/lz/tree/gh-pages">github小游戏地址</a><br />
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="butlist">
+					<ul>
+						<li id="set_updateApp">
+							<div class="butlist_title">我的作品</div>
+							<div class="butlist_line"></div>
+						</li>
+						<li>
+							<div class="butlist_title butlist_title_context">
+								<a target="view_window" href="http://lzuntalented.github.io/lz/three/">1.消消乐</a><br />
+								二消类游戏，即只要点击的元素周围存在超过一个相同元素，就可消除<br />
+								<a target="view_window" href="http://lzuntalented.github.io/lz/dou/">2.斗地主</a><br />
+								欢乐斗地主单机版游戏(功能完善中)<br />
+								<a target="view_window" href="http://lzuntalented.github.io/lz/2048/">3.2048</a><br />
+								<a target="view_window" href="http://lzuntalented.github.io/lz/tantantan/">4.弹弹球</a><br />
+								<a target="view_window" href="http://lzuntalented.github.io/lz/shengun/">5.神棍传奇</a><br />
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="butlist">
+					<ul>
+						<li id="set_updateApp">
+							<div class="butlist_title">我的技能</div>
+							<div class="butlist_line"></div>
+						</li>
+						<li>
+							<div class="butlist_title butlist_title_context">
+								html/html5/css/css3/js
+							</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title butlist_title_context">
+								Java(Android)
+							</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title butlist_title_context">
+								c/c++
+							</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title butlist_title_context">
+								php
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="page" id="page_info">
+				<div class="butlist">
+					<ul>
+						<li>
+							<div class="butlist_title">姓名：陆中</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title">性别：男</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title">籍贯：安徽阜阳</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title">出生日期：1993.02.10</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title">联系电话：18267380286</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title">联系邮箱：704540593@qq.com</div>
+							<div class="butlist_line"></div>
+						</li>
+					</ul>
+				</div>
+				<div class="butlist">
+					<ul>
+						<li>
+							<div class="butlist_title">学历：本科</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title">专业：计算机科学与技术</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title">毕业院校：嘉兴学院</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title">毕业时间：2015.06</div>
+							<div class="butlist_line"></div>
+						</li>
+					</ul>
+				</div>
+				
+				<div class="butlist">
+					<ul>
+						<li>
+							<div class="butlist_title">民族：汉</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title">政治面貌：团员</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title">健康情况：健康</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title">婚姻情况：未婚</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title">身高、体重：175CM、60KG</div>
+							<div class="butlist_line"></div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="page" id="page_work" >
+				<div class="butlist">
+					<ul>
+						<li>
+							<div class="butlist_title">校园APP---i嘉院(Android开发)</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title butlist_title_context">
+								时间：2013.10-2014.06(大三在校期间)
+							</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title butlist_title_context">
+								项目介绍地址：<a target="view_window"  href="http://youngs.zjxu.edu.cn/">http://youngs.zjxu.edu.cn/</a> 
+							</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title butlist_title_context">
+								主要职能：<br />
+								1.从事移动端页面的实现<br  />
+								2.掌握Android开发流程<br  />
+								3.完成客户端到服务器信息交换<br  />
+								4.使用viewpage,listview,gridview等Android控件进行页面搭建
+							</div>
+							<div class="butlist_line"></div>
+						</li>
+					</ul>
+				</div>
+				<div class="butlist">
+					<ul>
+						<li>
+							<div class="butlist_title">实习---江苏风铃网络公司(前端开发)</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title butlist_title_context">
+								时间：2013.03-2014.05(大四实习期间)
+							</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title butlist_title_context">
+								主要职能：<br />
+								1.从事手机微信页面的实现<br  />
+								2.完成定制模板的手机端页面<br  />
+								3.使用html5/css3/js进行页面布局和特效
+							</div>
+							<div class="butlist_line"></div>
+						</li>
+					</ul>
+				</div>
+				
+				<div class="butlist">
+					<ul>
+						<li>
+							<div class="butlist_title">工作---浙江唯旺乐德公司(网站后台开发)</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title butlist_title_context">
+								时间：2013.06-2014.10
+							</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title butlist_title_context">
+								主要职能：<br />
+								1.从事公司网站搭建<br  />
+								2.使用ecmall进行二次开发<br  />
+							</div>
+							<div class="butlist_line"></div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="page" id="page_own" >
+				<div class="butlist">
+					<ul>
+						<li>
+							<div class="butlist_title">兴趣爱好</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title">看书、运动、思考问题</div>
+						</li>
+					</ul>
+				</div>
+				<div class="butlist">
+					<ul>
+						<li>
+							<div class="butlist_title">自我评价</div>
+							
+							<div class="butlist_line"></div>
+							<div class="butlist_title">
+								1.自主学习能力较强，对待问题喜欢钻研。
+							</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title">
+								2.沟通交流能力较强，注重团队合作。
+							</div>
+							<div class="butlist_line"></div>
+							<div class="butlist_title" style="height: auto;">
+								3.性格开朗、乐观向上、拥有较强的学习能力和适应能力。
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="div-menu-container">
+				<div class="div-menu-context">
+					<div class="div-menu-head-info-container">
+						<div class="div-menu-head-info-img">
+							<img src="img/2.jpg" width="100%"/> 
+						</div>
+						<ul class="div-menu-head-info-name">
+							<li style="margin-top: 30%;">陆 中</li>
+							<li style="color: #FBC83E;font-size: 1.2em;">22岁 &nbsp;&nbsp;&nbsp;男</li>
+						</ul>
+					</div>
+					<div class="div-menu-improvement">
+						距离可以通过时间拉近
+					</div>
+					<ul class="div-menu-list">
+						<li data-tag="home">首页</li>
+						<li data-tag="info">基本资料</li>
+						<li data-tag="work">工作经历</li>
+						<li data-tag="own">自我评价</li>
+					</ul>
+				</div>
+				
+				<div class="div-menu-right"></div>
+			</div>
+		</div>
+		
+		<div class="div-loading-container">
+			<div class="spinner">
+			  	<div class="bounce1"></div>
+			  	<div class="bounce2"></div>
+			  	<div class="bounce3"></div>
+			</div>
+			<div class="div-loading-tip">
+				正在加载...<br />
+				即将为您呈现精彩！
+			</div>
+		</div>
+	</body>
+	<script src="js/jquery1-1.1.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var screen_height = $(window).height();
+		var screen_width = $(window).width();
+		
+		/*
+		 * 检测当前浏览器是否为移动端
+		 * 借鉴eqshow的判断方法
+		 */
+		function mobilecheck() {
+		    var a = !1;
+		    return function(b) {
+		        (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(b) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(b.substr(0, 4))) && (a = !0)
+		    }(navigator.userAgent || navigator.vendor || window.opera), a
+		}
+		
+		if(!mobilecheck()){
+			screen_width = 640;/*pc端显示限制为640px宽*/
+			$($(".div-menu-head-info-name li")[0]).css("padding-top","30%");
+			$($(".div-menu-head-info-name li")[1]).text("22岁 男");
+			
+		}
+		
+		/*将加载蒙版覆盖整个屏幕*/
+		$(".div-loading-container").css("height",screen_height+"px");
+		$(".spinner").css("margin-top",(screen_height/2 - 50) + "px");
+		
+		/*当页面加载完成，去除加载动画*/
+		window.onload = function(){
+			$(".div-loading-container").css("display","none");
+		}
+		
+		/*设置整个内容容器的显示范围*/
+		$(".div-main-container").css("width",screen_width+"px");
+		
+		$(".div-nav-menu").click(function(){
+			showMenu();
+		});
+		
+//		==========================隐藏菜单设置begin========================
+		$(".div-menu-container").css("height",screen_height+"px");
+		$(".div-menu-container").css("width",screen_width + "px");
+		window.onresize = function(){
+			$(".div-menu-container").css("height",screen_height+"px");
+		}
+		
+		$(".div-menu-right").click(function(){
+			hideMenu();
+		});
+		
+		$(".div-menu-list li").click(function(){
+			$(".div-nav-title").text($(this).text());
+			$(".page").css("display","none");
+			$("#page_" + $(this).attr("data-tag")).css("display","block");
+			hideMenu();
+		});
+		
+		function showMenu(){
+			$(".div-menu-container").addClass("div-menu-container-animte-show");
+			$(".div-menu-container").removeClass("div-menu-container-animte-hide");
+			$(".div-menu-container").css("display","block");
+//			$(".div-menu-container").css("width","100%");
+		}
+		
+		function hideMenu(){
+//			$(".div-menu-container").css("width","0px");
+			$(".div-menu-container").removeClass("div-menu-container-animte-show");
+			$(".div-menu-container").addClass("div-menu-container-animte-hide");
+//			$(".div-menu-container").css("display","none");
+		}
+	</script>
+</html>
