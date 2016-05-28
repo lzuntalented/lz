@@ -1,7 +1,12 @@
 
 var HelloWorldLayer = cc.Layer.extend({
     sprite:null,
-    map : [],
+    map : [],//存放网格状态的数组
+    map_sprite : [],//存放网格放置的精灵数组
+    
+   	drag_index : null,//当前正在拖动精灵的序列
+   	array_bottom : [],//底部三个可供拖拽的精灵
+   	
     ctor:function () {
         //////////////////////////////
         // 1. super init first
@@ -49,7 +54,7 @@ var HelloWorldLayer = cc.Layer.extend({
         		var x = Math.floor(point.x / (cc.winSize.width / 3));
 //      		console.log(point.x + '-' + cc.winSize.width + "-" + (cc.winSize.width / 3) + "-" + x);
 				self.drag_index = x;
-				
+				self.array_bottom[x].zIndex = 2;
 	        	return true;
 	    	},
 	    	onTouchMoved : function(touch, event){
@@ -105,40 +110,123 @@ var HelloWorldLayer = cc.Layer.extend({
 
 	            for(var i = 0 ; i < list.length ; ++i){
 	            	self.map[list[i][0] + ret.row][list[i][1]  + ret.col] = 1;
+	            	self.createGridViewItem(list[i][0] + ret.row,list[i][1]  + ret.col,self.array_bottom[self.drag_index].type);
 	            }
-	            self.array_bottom[self.drag_index].setPosition(cc.p(ret.x,ret.y));
+//	            self.array_bottom[self.drag_index].setPosition(cc.p(ret.x,ret.y));
+	            self.removeChild(self.array_bottom[self.drag_index]);
 	            self.array_bottom[self.drag_index] = null;
 				self.createBottomByIndex(self,self.drag_index);
-				
-				console.log(self.map);
+				self.clearLine();
+				if(!self.checkGameOver()){
+					alert("Game Over");
+				}
+//				console.log(self.map);
 	    	}
         },this);
 		
         return true;
    	},
    	
+   	/*游戏结束检测*/
+   	checkGameOver : function(){
+   		
+		for(var i = 0;i < PublicData.gridview_row ; ++i) {
+   			for(var j = 0; j < PublicData.gridview_col ; ++j){
+   				if(this.map[i][j] == 1 ){
+   					continue;
+   				}
+   				
+   				for(var k = 0; k < this.array_bottom.length ; ++ k){
+   					var list = this.array_bottom[k].vector;
+   					var tag = 1;
+   					for(var l = 0 ; l < list.length ; ++l){
+   						var row = i + list[l][0];
+   						var col = j + list[l][1];
+   						
+   						if(row < 0 || row >= PublicData.gridview_row){
+   							tag = 3;
+   							break;
+		            	}
+		            	if(col < 0 || col >= PublicData.gridview_col){
+		            		tag = 3;
+		            		break;
+		            	}
+		            	
+   						if(this.map[row][col] == 1){
+   							tag = 2;
+   							break;
+   						}
+   					}
+   					if(tag == 1) return true;
+   				}
+   			}
+		}
+		
+		return false;
+   	},
+   	
+   	/*清理满行*/
+   	clearLine : function(){
+   		for(var i = 0;i < PublicData.gridview_row ; ++i) {
+   			var tag = true;
+   			
+   			for(var j = 0; j < PublicData.gridview_col ; ++j){
+   				if(this.map[i][j] != 1 ){
+   					tag = false;
+   					break;
+   				}
+   			}
+   			
+   			if(tag){
+   				for(var j = 0; j < PublicData.gridview_col ; ++j){
+	   				this.map[i][j] = 0 ;
+	   				this.removeChild(this.map_sprite[i][j]);
+					this.map_sprite[i][j] = null ;
+	   			}
+   			}
+   		}
+   	},
+   	
+   	/*通过给定序列创建一个网格精灵*/
+   	createGridViewItem : function(row,col,type){
+   		var x_offset = (cc.winSize.width - (PublicData.dialmond_width + 3) * PublicData.gridview_col) / 2;
+		var y_offset = (cc.winSize.height - (PublicData.dialmond_height + 3) * PublicData.gridview_row) / 2;
+		var sprite = new cc.Sprite('res/color_'+type+'.png');
+		sprite.attr({
+			x : (PublicData.dialmond_width + 3) * col + x_offset,
+			y : (PublicData.dialmond_height + 3) * row + y_offset + PublicData.dialmond_height / 2,
+			anchorX : 0,
+			anchorY : 1
+		});
+		this.addChild(sprite);
+		this.map_sprite[row][col] = sprite;
+   	},
+   	
+   	/*当前拖拽不合规范，重置拖拽精灵到底部*/
    	setBottomBack : function(self){
    		var y_offset = (cc.winSize.height - (PublicData.dialmond_height + 3) * PublicData.gridview_row) / 2;
 		
 		self.array_bottom[self.drag_index].attr({
-			x : cc.winSize.width / 3 * this.drag_index,
-			y : y_offset - PublicData.dialmond_height,
+			x : (cc.winSize.width / 3 * this.drag_index )+ (cc.winSize.width / 6) - self.array_bottom[self.drag_index].width / 2,
+			y : (y_offset - PublicData.dialmond_height) / 2 + self.array_bottom[self.drag_index].height / 2,
 		});	
    	},
    	
+   	/*创建指定序列的底部精灵*/
    	createBottomByIndex : function(self,idx){
    		var y_offset = (cc.winSize.height - (PublicData.dialmond_height + 3) * PublicData.gridview_row) / 2;
 		
 		var type = Math.floor(Math.random() * 4) + 1;
 		var sprite = new DiamondSprite(type);
 		sprite.attr({
-			x : cc.winSize.width / 3 * idx,
-			y : y_offset - PublicData.dialmond_height,
+			x : (cc.winSize.width / 3 * idx) + (cc.winSize.width / 6) - sprite.width / 2,
+			y : (y_offset - PublicData.dialmond_height) / 2 + sprite.height / 2,
 		});	
 		self.addChild(sprite);
 		self.array_bottom[idx] = sprite;
    	},
    	
+   	/*返回当前触摸点对应的网格序列*/
    	getTouchPoint : function(point){
    		var result = {
    			col : 0,
@@ -166,7 +254,7 @@ var HelloWorldLayer = cc.Layer.extend({
 // 			--row;
 // 			--col;
 // 		}
-   		console.log(point.x + "--" + start_x + "==" + point.y + '--' + start_y);
+// 		console.log(point.x + "--" + start_x + "==" + point.y + '--' + start_y);
    		result.col = col;
    		result.row = row;
    		result.x = start_x + col * PublicData.item_width;
@@ -175,14 +263,16 @@ var HelloWorldLayer = cc.Layer.extend({
    		return result;
    	},
    	
-   	draw : null,
-   	drag_index : null,
+   	/*创建网格背景*/
    	createGridView : function(){
 
    		for(var i = 0 ; i < PublicData.gridview_row ; i++){
    			var tmp = [];
+   			var map_tmp = [];
    			for(var j = 0  ; j < PublicData.gridview_col ; j++){
 				tmp.push(0);
+				map_tmp.push(null);
+				
 				var x_offset = (cc.winSize.width - (PublicData.dialmond_width + 3) * PublicData.gridview_col) / 2;
 				var y_offset = (cc.winSize.height - (PublicData.dialmond_height + 3) * PublicData.gridview_row) / 2;
 				var sprite = new cc.Sprite(res.Color_0_png);
@@ -195,9 +285,11 @@ var HelloWorldLayer = cc.Layer.extend({
 				this.addChild(sprite);
    			}
    			this.map.push(tmp);
+   			this.map_sprite.push(map_tmp);
    		}
    	},
-   	array_bottom : [],
+   	
+   	/*创建底部三个可供拖动的精灵*/
    	createBottom : function(){
 		var y_offset = (cc.winSize.height - (PublicData.dialmond_height + 3) * PublicData.gridview_row) / 2;
 		
@@ -206,8 +298,8 @@ var HelloWorldLayer = cc.Layer.extend({
 // 			console.log('type====' + type);
 			var sprite = new DiamondSprite(type);
 			sprite.attr({
-				x : cc.winSize.width / 3 * i,
-				y : y_offset - PublicData.dialmond_height,
+				x : (cc.winSize.width / 3 * i) + (cc.winSize.width / 6) - sprite.width / 2,
+				y : (y_offset - PublicData.dialmond_height) / 2 + sprite.height / 2,
 			});
 			this.array_bottom.push(sprite);
 			this.addChild(sprite);
