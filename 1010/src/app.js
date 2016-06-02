@@ -7,6 +7,8 @@ var HelloWorldLayer = cc.Layer.extend({
    	drag_index : null,//当前正在拖动精灵的序列
    	array_bottom : [],//底部三个可供拖拽的精灵
    	
+   	score : 0,
+   	score_label : null,
     ctor:function () {
         //////////////////////////////
         // 1. super init first
@@ -18,6 +20,13 @@ var HelloWorldLayer = cc.Layer.extend({
         // ask the window size
         var size = cc.winSize;
         
+        var label = cc.LabelTTF.create("当前积分:0","Aria",32);
+		label.x = size.width / 2;
+		label.y = size.height - 40;
+		label.color = cc.color(255,255,255);
+		this.addChild(label);
+		this.score_label = label;
+		
 //      var spiret = new cc.Sprite(res.HelloWorld_png);
 //      this.addChild(spiret,11);
 //      spiret.opacity = 100;
@@ -55,6 +64,7 @@ var HelloWorldLayer = cc.Layer.extend({
 //      		console.log(point.x + '-' + cc.winSize.width + "-" + (cc.winSize.width / 3) + "-" + x);
 				self.drag_index = x;
 				self.array_bottom[x].zIndex = 2;
+				self.array_bottom[x].scale = 1;
 	        	return true;
 	    	},
 	    	onTouchMoved : function(touch, event){
@@ -117,6 +127,7 @@ var HelloWorldLayer = cc.Layer.extend({
 	            self.array_bottom[self.drag_index] = null;
 				self.createBottomByIndex(self,self.drag_index);
 				self.clearLine();
+				
 				if(!self.checkGameOver()){
 					alert("Game Over");
 				}
@@ -127,6 +138,11 @@ var HelloWorldLayer = cc.Layer.extend({
         return true;
    	},
    	
+   	/*增加当前得分*/
+   	addScore : function(){
+   		this.score ++ ;
+   		this.score_label.string = "当前得分:" + this.score;
+   	},
    	/*游戏结束检测*/
    	checkGameOver : function(){
    		
@@ -179,12 +195,23 @@ var HelloWorldLayer = cc.Layer.extend({
    			
    			if(tag){
    				for(var j = 0; j < PublicData.gridview_col ; ++j){
-	   				this.map[i][j] = 0 ;
-	   				this.removeChild(this.map_sprite[i][j]);
-					this.map_sprite[i][j] = null ;
+   					var self = this;
+   					this.map_sprite[i][j].runAction(cc.sequence(cc.delayTime(0.005*j),cc.scaleTo(0,0.1),cc.callFunc(self.clearAction,self,[i,j])));
+//	   				this.map[i][j] = 0 ;
+//	   				this.removeChild(this.map_sprite[i][j]);
+//					this.map_sprite[i][j] = null ;
 	   			}
+   				this.addScore();
    			}
    		}
+   	},
+   	
+   	clearAction : function(self,data){
+   		var i = data[0];
+   		var j = data[1];
+   		this.removeChild(this.map_sprite[i][j]);
+		this.map_sprite[i][j] = null ;
+		this.map[i][j] = 0 ;
    	},
    	
    	/*通过给定序列创建一个网格精灵*/
@@ -210,24 +237,34 @@ var HelloWorldLayer = cc.Layer.extend({
 			x : (cc.winSize.width / 3 * this.drag_index )+ (cc.winSize.width / 6) - self.array_bottom[self.drag_index].width / 2,
 			y : (y_offset - PublicData.dialmond_height) / 2 + self.array_bottom[self.drag_index].height / 2,
 		});	
+		
+		self.array_bottom[self.drag_index].scale = 0.8;
+		self.array_bottom[self.drag_index].x = self.array_bottom[self.drag_index].x + self.array_bottom[self.drag_index].width * 0.1;
+		self.array_bottom[self.drag_index].y = self.array_bottom[self.drag_index].y - self.array_bottom[self.drag_index].height * 0.1;
    	},
    	
    	/*创建指定序列的底部精灵*/
    	createBottomByIndex : function(self,idx){
    		var y_offset = (cc.winSize.height - (PublicData.dialmond_height + 3) * PublicData.gridview_row) / 2;
 		
-		var type = Math.floor(Math.random() * 4) + 1;
+		var type = Math.floor(Math.random() * PublicData.dialmond_type) + 1;
 		var sprite = new DiamondSprite(type);
 		sprite.attr({
 			x : (cc.winSize.width / 3 * idx) + (cc.winSize.width / 6) - sprite.width / 2,
 			y : (y_offset - PublicData.dialmond_height) / 2 + sprite.height / 2,
 		});	
+		
+		sprite.scale = 0.8;
+		sprite.x = sprite.x + sprite.width * 0.1;
+		sprite.y = sprite.y - sprite.height * 0.1;
+		
 		self.addChild(sprite);
 		self.array_bottom[idx] = sprite;
    	},
    	
    	/*返回当前触摸点对应的网格序列*/
    	getTouchPoint : function(point){
+   		console.log(point);
    		var result = {
    			col : 0,
    			row : 0,
@@ -235,25 +272,31 @@ var HelloWorldLayer = cc.Layer.extend({
    			y : 0,
    		};
    		var start_x = (cc.winSize.width - PublicData.item_width * PublicData.gridview_col) / 2;
-   		var start_y = (cc.winSize.height - PublicData.item_height * PublicData.gridview_row) / 2;
-   		
+   		var start_y = (cc.winSize.height - PublicData.item_height * PublicData.gridview_row) / 2 - PublicData.item_height / 2;
+   		console.log(start_x +  "=="+start_y);
    		var col = Math.floor((point.x - start_x) / PublicData.item_width);
 // 		console.log("col" + col);
    		var col_increa = (point.x - start_x) % PublicData.item_width;
-   		if(col_increa > PublicData.item_width / 2){
-   			++col;
-   		}
+// 		if(col_increa > PublicData.item_width / 2){
+// 			++col;
+// 		}
    		
    		var row = Math.floor((point.y - start_y) / PublicData.item_height);
-// 		console.log("row" + row);
+   		console.log("row" + row + " : " + col + "=row");
    		var row_increa = (point.y - start_y) % PublicData.item_height;
-   		if(row_increa > PublicData.item_height / 2){
-   			++row;
-   		}
-// 		if(row_increa < PublicData.item_height / 2 && col_increa < PublicData.item_width / 2){
-// 			--row;
-// 			--col;
+// 		if(row_increa > PublicData.item_height / 2){
+// 			++row;
 // 		}
+   	
+   		if(row_increa < PublicData.item_height / 2 && col_increa > PublicData.item_width / 2){
+   			--row;
+   			++col;
+   		}else if(row_increa > PublicData.item_height / 4 && col_increa > PublicData.item_width / 2){
+   			++col;
+   		}else if(row_increa < PublicData.item_height / 4 && col_increa < PublicData.item_width / 2){
+   			--row;
+   		}
+   		
 // 		console.log(point.x + "--" + start_x + "==" + point.y + '--' + start_y);
    		result.col = col;
    		result.row = row;
@@ -294,13 +337,17 @@ var HelloWorldLayer = cc.Layer.extend({
 		var y_offset = (cc.winSize.height - (PublicData.dialmond_height + 3) * PublicData.gridview_row) / 2;
 		
    		for(var i = 0 ; i < 3 ; i++){
-   			var type = Math.floor(Math.random() * 4) + 1;
+   			var type = Math.floor(Math.random() * PublicData.dialmond_type) + 1;
 // 			console.log('type====' + type);
 			var sprite = new DiamondSprite(type);
 			sprite.attr({
 				x : (cc.winSize.width / 3 * i) + (cc.winSize.width / 6) - sprite.width / 2,
 				y : (y_offset - PublicData.dialmond_height) / 2 + sprite.height / 2,
 			});
+			
+			sprite.scale = 0.8;
+			sprite.x = sprite.x + sprite.width * 0.1;
+			sprite.y = sprite.y - sprite.height * 0.1;
 			this.array_bottom.push(sprite);
 			this.addChild(sprite);
 			

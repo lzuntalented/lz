@@ -6,5 +6,7 @@ var PublicData = {
 	'item_height' : 55,
 	
 	'gridview_row' : 10,
-	'gridview_col' : 10
+	'gridview_col' : 10,
+	
+	'dialmond_type' : 6,
 }

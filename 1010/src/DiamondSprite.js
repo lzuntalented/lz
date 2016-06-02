@@ -27,7 +27,12 @@ var DiamondSprite = cc.Layer.extend({
 			case 4:
 				this.drawLong();
 				break;
-				
+			case 5:
+				this.drawZhuan();
+				break;	
+			case 6:
+				this.drawL();
+				break;
 			default:
 				break;
 		}
@@ -132,9 +137,51 @@ var DiamondSprite = cc.Layer.extend({
 		
 	},
 	
-	setAlpha : function(num){
-		this.removeChild(this.drawNode);
-		this.opacity = num;
-		this.drawItem(this.type);
-	}
+	drawZhuan : function(){
+//		if(dir == 0){
+			this.drawPoint(cc.p(0,0 + PublicData.item_height));
+			this.drawPoint(cc.p(PublicData.item_width , 0 + PublicData.item_height));
+			this.drawPoint(cc.p(PublicData.item_width , 0 ));
+			this.drawPoint(cc.p(PublicData.item_width * 2 , 0 ));
+			
+			this.width = PublicData.item_width * 3;
+			this.height = PublicData.item_height * 2;
+			
+			this.vector.push([0,0]);
+			this.vector.push([0,1]);
+			this.vector.push([-1,1]);
+			this.vector.push([-1,2]);
+//		}else if(dir == 1){
+//			
+//		}else if(dir == 2){
+//			
+//		}else if(dir == 3){
+//			
+//		}		
+	},
+	
+	drawL : function(){
+//		if(dir == 0){
+			this.drawPoint(cc.p(0,0 + PublicData.item_height));
+			this.drawPoint(cc.p(0,0));
+			this.drawPoint(cc.p(0,0 - PublicData.item_height));
+			this.drawPoint(cc.p(PublicData.item_width , 0  + PublicData.item_height));
+
+			
+			this.width = PublicData.item_width * 3;
+			this.height = PublicData.item_height * 2;
+			
+			this.vector.push([0,0]);
+			this.vector.push([0,1]);
+			this.vector.push([-1,0]);
+			this.vector.push([-2,0]);
+			
+//		}else if(dir == 1){
+//			
+//		}else if(dir == 2){
+//			
+//		}else if(dir == 3){
+//			
+//		}		
+	},
 });
