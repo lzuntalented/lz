@@ -197,7 +197,7 @@ var HelloWorldLayer = cc.Layer.extend({
    				for(var j = 0; j < PublicData.gridview_col ; ++j){
    					var self = this;
    					this.map_sprite[i][j].runAction(cc.sequence(cc.delayTime(0.005*j),cc.scaleTo(0,0.1),cc.callFunc(self.clearAction,self,[i,j])));
-//	   				this.map[i][j] = 0 ;
+	   				this.map[i][j] = 0 ;
 //	   				this.removeChild(this.map_sprite[i][j]);
 //					this.map_sprite[i][j] = null ;
 	   			}
@@ -211,7 +211,7 @@ var HelloWorldLayer = cc.Layer.extend({
    		var j = data[1];
    		this.removeChild(this.map_sprite[i][j]);
 		this.map_sprite[i][j] = null ;
-		this.map[i][j] = 0 ;
+		
    	},
    	
    	/*通过给定序列创建一个网格精灵*/
@@ -241,6 +241,8 @@ var HelloWorldLayer = cc.Layer.extend({
 		self.array_bottom[self.drag_index].scale = 0.8;
 		self.array_bottom[self.drag_index].x = self.array_bottom[self.drag_index].x + self.array_bottom[self.drag_index].width * 0.1;
 		self.array_bottom[self.drag_index].y = self.array_bottom[self.drag_index].y - self.array_bottom[self.drag_index].height * 0.1;
+
+   		if(self.array_bottom[self.drag_index].direction == 1 || self.array_bottom[self.drag_index].direction == 3) self.array_bottom[self.drag_index].y = self.array_bottom[self.drag_index].y - PublicData.item_height * 0.8;
    	},
    	
    	/*创建指定序列的底部精灵*/
@@ -257,7 +259,7 @@ var HelloWorldLayer = cc.Layer.extend({
 		sprite.scale = 0.8;
 		sprite.x = sprite.x + sprite.width * 0.1;
 		sprite.y = sprite.y - sprite.height * 0.1;
-		
+		if(sprite.direction == 1 || sprite.direction == 3) sprite.y = sprite.y - PublicData.item_height * 0.8;
 		self.addChild(sprite);
 		self.array_bottom[idx] = sprite;
    	},
@@ -277,17 +279,24 @@ var HelloWorldLayer = cc.Layer.extend({
    		var col = Math.floor((point.x - start_x) / PublicData.item_width);
 // 		console.log("col" + col);
    		var col_increa = (point.x - start_x) % PublicData.item_width;
+// 		col_increa = Math.abs(col_increa);
 // 		if(col_increa > PublicData.item_width / 2){
 // 			++col;
 // 		}
    		
    		var row = Math.floor((point.y - start_y) / PublicData.item_height);
-   		console.log("row" + row + " : " + col + "=row");
+   		console.log("row" + row + " : " + "=col" + col );
    		var row_increa = (point.y - start_y) % PublicData.item_height;
+   		row_increa = Math.abs(row_increa);
 // 		if(row_increa > PublicData.item_height / 2){
 // 			++row;
 // 		}
-   	
+   	console.log('ri' + row_increa + 'ci' + col_increa);
+   		if(col_increa < 0 ){//左侧超出网格处理，模拟落在第一格
+   			if(Math.abs(col_increa) < PublicData.item_width / 2){
+   				col_increa = PublicData.item_width - Math.abs(col_increa);
+   			}
+   		}
    		if(row_increa < PublicData.item_height / 2 && col_increa > PublicData.item_width / 2){
    			--row;
    			++col;
@@ -348,9 +357,10 @@ var HelloWorldLayer = cc.Layer.extend({
 			sprite.scale = 0.8;
 			sprite.x = sprite.x + sprite.width * 0.1;
 			sprite.y = sprite.y - sprite.height * 0.1;
+			if(sprite.direction == 1 || sprite.direction == 3) sprite.y = sprite.y - PublicData.item_height * 0.8;
 			this.array_bottom.push(sprite);
 			this.addChild(sprite);
-			
+			console.log(sprite.y );
 //			console.log(sprite.getContentSize());
    		}
    	},
